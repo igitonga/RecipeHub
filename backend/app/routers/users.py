@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-import app.db.crud as crud
-import app.db.schemas as schemas
+import app.db.cruds.users as crud
+import app.db.schemas.users as schemas
 from app.db.database import SessionLocal
 from app.utils.jwt import create_access_token
 router = APIRouter()
@@ -29,5 +29,9 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid username or password")
     
     access_token = create_access_token(data={"sub": db_user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+            "access_token": access_token, 
+            "token_type": "bearer",
+            "user_id": db_user.id,
+        }
 

@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChefHat, Plus, Minus, Loader2 } from 'lucide-react';
 import { CreateRecipe } from '../lib/api';
 import toast from 'react-hot-toast';
+import { useAuth } from '../contexts/AuthContext';
 
 function AddRecipe() {
   const navigate = useNavigate();
-  
+  const queryClient = useQueryClient();
+  const { userId } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -18,10 +21,10 @@ function AddRecipe() {
   const [ingredients, setIngredients] = useState([{ step: '' }]);
   const [instructions, setInstructions] = useState([{ step: '' }]);
 
-
   const AddRecipeMutation = useMutation({
     mutationFn: CreateRecipe,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recipes'] });
       toast.success('Recipe added successfully');
       navigate('/recipes');
     },
@@ -44,7 +47,7 @@ function AddRecipe() {
       description,
       ingredients: JSON.stringify(ingredients.map((ingredient) => ingredient.step)), 
       instructions: JSON.stringify(instructions.map((instruction) => instruction.step)), 
-      user_id: 2
+      user_id: userId
     },
     {
       onSettled: () => {

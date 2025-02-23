@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 interface AuthContextType {
   isAuthenticated: boolean;
   accessToken: string | null;
-  login: (token: string) => void;
+  userId: number;
+  login: (token: string, userId: number) => void;
   logout: () => void;
 }
 
@@ -13,9 +14,11 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number>(0);
 
-  const login = (token: string) => {
+  const login = (token: string, userId: number) => {
     setAccessToken(token);
+    setUserId(userId);
   };
 
   const logout = () => {
@@ -28,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         isAuthenticated: !!accessToken,
         accessToken,
+        userId,
         login,
         logout,
       }}

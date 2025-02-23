@@ -29,7 +29,7 @@ function SignIn() {
   const signInMutation = useMutation({
     mutationFn: LoginUser,
     onSuccess: (data) => {
-      login(data.access_token);
+      login(data.access_token, data.user_id);
       navigate('/recipes');
     },
     onError: (error: any) => {

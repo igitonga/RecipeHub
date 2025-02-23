@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from app.db.models import Recipe, User 
-from app.db.schemas import RecipeCreate, UserCreate, UserBase
+from app.db.models.users import User
+from app.db.schemas.users import UserBase, UserCreate
 from app.utils.password import Hasher
 
 def get_user(db: Session, user_id: int):
@@ -30,24 +30,3 @@ def authenticate_user(db: Session, email: str, password: str):
     user = db.query(User).filter(User.email == email).first()
     if user and Hasher.verify_password(password, user.hashed_password):
         return user
-    return None
-
-def get_recipes(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Recipe).offset(skip).limit(limit).all()
-
-def get_recipe(db: Session, recipe_id: int):
-    return db.query(Recipe).filter(Recipe.id == recipe_id).first()
-
-def create_recipe(db: Session, recipe: RecipeCreate):
-    db_recipe = Recipe(**recipe.dict())
-    db.add(db_recipe)
-    db.commit()
-    db.refresh(db_recipe)
-    return db_recipe
-
-def delete_recipe(db: Session, recipe_id: int):
-    db_recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
-    if db_recipe:
-        db.delete(db_recipe)
-        db.commit()
-    return db_recipe
