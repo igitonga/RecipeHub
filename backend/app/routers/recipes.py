@@ -21,7 +21,7 @@ def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)):
 def read_recipes(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return crud.get_recipes(db, skip=skip, limit=limit)
 
-@router.get("/recipes/{recipe_id}", response_model=schemas.RecipeResponse)
+@router.get("/recipe/{recipe_id}", response_model=schemas.RecipeResponse)
 def read_recipe(recipe_id: int, db: Session = Depends(get_db)):
     db_recipe = crud.get_recipe(db, recipe_id)
     if db_recipe is None:

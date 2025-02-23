@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, ChefHat, Loader2 } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { LoginUser } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
 import toast from "react-hot-toast";
+import { useAuth } from '../contexts/AuthContext';
 
 function SignIn() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { login } = useAuth();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,8 @@ function SignIn() {
 
   const signInMutation = useMutation({
     mutationFn: LoginUser,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      login(data.access_token);
       navigate('/recipes');
     },
     onError: (error: any) => {

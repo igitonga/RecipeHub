@@ -69,3 +69,12 @@ export const CreateRecipe = async (recipe: RecipeInput) => {
         throw new Error(error.message);
     }
 }
+
+export const GetRecipe = async (recipe_id: number) => {
+    try {
+        const res = await api.get(`/recipe/${recipe_id}`);
+        return res.data;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+}

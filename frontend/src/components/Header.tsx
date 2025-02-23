@@ -1,11 +1,13 @@
 
 import { useState } from 'react';
-import { Menu, X, ChefHat } from 'lucide-react';
+import { Menu, X, ChefHat, LogOut } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -45,12 +47,22 @@ const Header = () => {
             >
               Add Recipe
             </Link>
-            <Link
-              to="/signin"
-              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-            >
-              Sign In
-            </Link>
+            {isAuthenticated ? (
+              <button
+                onClick={logout}
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/signin"
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+              >
+                Sign In
+              </Link>
+            )}
           </nav>
 
           {/* Mobile menu button */}
@@ -102,12 +114,24 @@ const Header = () => {
               >
                 About
               </Link>
-              <Link
-                to="/signin"
-                className="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Sign In
-              </Link>
+              {isAuthenticated ? (
+                <button
+                  onClick={logout}
+                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <div className="flex items-center">
+                    <LogOut className="w-5 h-5 mr-2" />
+                    Logout
+                  </div>
+                </button>
+              ) : (
+                <Link
+                  to="/signin"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
           </div>
         )}
