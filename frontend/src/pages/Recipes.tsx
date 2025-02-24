@@ -52,8 +52,6 @@ function Recipes() {
     }
   });
 
-  console.log(filteredRecipes);
-
   return (
     <div className="min-h-screen bg-gray-50">
 

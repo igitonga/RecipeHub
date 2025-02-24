@@ -26,6 +26,6 @@ class Recipe(Base):
             "difficulty": self.difficulty,
             "user_id": self.user_id,
             "description": self.description,
-            "ingredients": json.loads(self.ingredients) if self.ingredients else [],  # Convert string to JSON
-            "instructions": json.loads(self.instructions) if self.instructions else [],  # Convert string to JSON
+            "ingredients": json.loads(self.ingredients) if self.ingredients else [], 
+            "instructions": json.loads(self.instructions) if self.instructions else [],  
             }

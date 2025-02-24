@@ -19,20 +19,114 @@ function RecipeDetails() {
   const [duration, setDuration] = useState(0);
   const [difficulty, setDifficulty] = useState('');
   const [description, setDescription] = useState('');
-  const [ingredients, setIngredients] = useState([{ step: '' }]);
-  const [instructions, setInstructions] = useState([{ step: '' }]);
+  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [instructions, setInstructions] = useState<string[]>([]);
+
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['recipe', id],
     queryFn: () => GetRecipe(Number(id)),
-  })
+  });
+
+  const UpdateRecipeMutation = useMutation({
+    mutationFn: () => UpdateRecipe(Number(id), {
+      recipe_id: Number(id),
+      title,
+      image_url: imageUrl,
+      rating,
+      duration,
+      difficulty,
+      description,
+      ingredients: JSON.stringify(ingredients.map((ingredient) => ingredient)), 
+      instructions: JSON.stringify(instructions.map((instruction) => instruction))
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      toast.success('Recipe upated successfully');
+      navigate('/recipes');
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    }
+  });
+
+  const DeleteRecipeMutation = useMutation({
+    mutationFn: () => DeleteRecipe(Number(id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      toast.success('Recipe deleted successfully');
+      navigate('/recipes');
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    }
+  });
+
+  const handleEdit = () => {
+    setTitle(data.title);
+    setImageUrl(data.image_url);
+    setRating(data.rating);
+    setDuration(data.duration);
+    setDifficulty(data.difficulty);
+    setDescription(data.description);
+    setIngredients(JSON.parse(data.ingredients));
+    setInstructions(JSON.parse(data.instructions));
+
+    setIsEditDialogOpen(true);
+    setIsMenuOpen(false);
+  }
+
+  const handleDelete = () => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this recipe?');
+    if (confirmDelete) {
+      DeleteRecipeMutation.mutate();
+    }
+    setIsMenuOpen(false);
+  }
+
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    UpdateRecipeMutation.mutate();
+    
+    setIsEditDialogOpen(false);
+  }
+   
+  const addIngredient = () => {
+    setIngredients([...ingredients]);
+  };
+
+  const removeIngredient = (index: number) => {
+    setIngredients(ingredients.filter((_, i) => i !== index));
+  };
+
+  const updateIngredient = (index: number, value: string) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index] = value;
+    setIngredients(newIngredients);
+  };
+
+  const addInstruction = () => {
+    setInstructions([...instructions]);
+  };
+
+  const removeInstruction = (index: number) => {
+    setInstructions(instructions.filter((_, i) => i !== index));
+  };
+
+  const updateInstruction = (index: number, value: string) => {
+    const newInstructions = [...instructions];
+    newInstructions[index] = value;
+    setInstructions(newInstructions);
+  };
 
   if (isPending) {
     return <Loader />;
   }
 
   if (isError) {
-    return toast.error(error.message)
+    toast.error(error.message);
+    return null;
   }
 
   if (!data) {
@@ -45,97 +139,6 @@ function RecipeDetails() {
       </div>
     );
   }
-
-  const handleEdit = () => {
-    setTitle(data.title);
-    setImageUrl(data.image_url);
-    setRating(data.rating);
-    setDuration(data.duration);
-    setDifficulty(data.difficulty);
-    setDescription(data.description);
-    setIngredients(JSON.parse(data.ingredients));
-    setInstructions(JSON.parse(data.instructions));
-    
-    setIsEditDialogOpen(true);
-    setIsMenuOpen(false);
-  }
-
-  // const DeleteRecipeMutation = useMutation({
-  //   mutationFn: () => DeleteRecipe(Number(id)),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['recipes'] });
-  //     toast.success('Recipe deleted successfully');
-  //     navigate('/recipes');
-  //   },
-  //   onError: (error: any) => {
-  //     toast.error(error.message);
-  //   }
-  // });
-
-  const handleDelete = () => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this recipe?');
-    if (confirmDelete) {
-      // DeleteRecipeMutation.mutate();
-    }
-    setIsMenuOpen(false);
-  }
-
-  const UpdateRecipeMutation = useMutation({
-    mutationFn: () => UpdateRecipe(Number(id), {
-      title,
-      image_url: imageUrl,
-      rating,
-      duration,
-      difficulty,
-      description,
-      ingredients: JSON.stringify(ingredients.map((ingredient) => ingredient.step)), 
-      instructions: JSON.stringify(instructions.map((instruction) => instruction.step))
-    }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
-      toast.success('Recipe upated successfully');
-      navigate('/recipes');
-    },
-    onError: (error: any) => {
-      toast.error(error.message);
-    }
-  });
-
-  const handleSaveEdit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    UpdateRecipeMutation.mutate();
-    
-    setIsEditDialogOpen(false);
-  }
-   
-  const addIngredient = () => {
-    setIngredients([...ingredients, { step: '' }]);
-  };
-
-  const removeIngredient = (index: number) => {
-    setIngredients(ingredients.filter((_, i) => i !== index));
-  };
-
-  const updateIngredient = (index: number, value: string) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index] = { step: value };
-    setIngredients(newIngredients);
-  };
-
-  const addInstruction = () => {
-    setInstructions([...instructions, { step: '' }]);
-  };
-
-  const removeInstruction = (index: number) => {
-    setInstructions(instructions.filter((_, i) => i !== index));
-  };
-
-  const updateInstruction = (index: number, value: string) => {
-    const newInstructions = [...instructions];
-    newInstructions[index] = { step: value };
-    setInstructions(newInstructions);
-  };
 
   return (
     <>
@@ -360,7 +363,7 @@ function RecipeDetails() {
                   </div>
 
                   <div className="space-y-4">
-                    {/* {ingredients.map((ingredient: string, index: number) => (
+                    {ingredients.map((ingredient, index) => (
                       <div key={index} className="flex items-start gap-4">
                         <span className="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-medium">
                           {index + 1}
@@ -382,7 +385,7 @@ function RecipeDetails() {
                           <Minus className="h-5 w-5" />
                         </button>
                       </div>
-                    ))} */}
+                    ))}
                   </div>
                 </div>
 
@@ -401,7 +404,7 @@ function RecipeDetails() {
                   </div>
 
                   <div className="space-y-4">
-                    {/* {instructions.map((instruction: string, index: number) => (
+                    {instructions.map((instruction, index) => (
                       <div key={index} className="flex items-start gap-4">
                         <span className="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-medium">
                           {index + 1}
@@ -423,7 +426,7 @@ function RecipeDetails() {
                           <Minus className="h-5 w-5" />
                         </button>
                       </div>
-                    ))} */}
+                    ))}
                   </div>
                 </div>
 

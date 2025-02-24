@@ -61,7 +61,6 @@ interface RecipeInput {
 }
 
 export const CreateRecipe = async (recipe: RecipeInput) => {
-    console.log(recipe);
     try {
         const res = await api.post('/create/recipe', recipe);
         return res.data;
@@ -89,6 +88,7 @@ export const DeleteRecipe = async (recipe_id: number) => {
 }
 
 interface UpdateRecipeInput {
+    recipe_id: number;
     title: string;
     image_url: string;
     rating: number;
@@ -100,6 +100,7 @@ interface UpdateRecipeInput {
 }
 
 export const UpdateRecipe = async (recipe_id: number, recipe: UpdateRecipeInput) => {
+    console.log(recipe);
     try {
         const res = await api.put(`/recipe/${recipe_id}`, recipe);
         return res.data;
