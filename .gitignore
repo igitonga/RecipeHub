@@ -1,6 +1,6 @@
 # backend
 backend/.env
-
+backend/venv
 
 # frontend
 frontend/node_modules
