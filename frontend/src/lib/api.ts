@@ -78,3 +78,33 @@ export const GetRecipe = async (recipe_id: number) => {
         throw new Error(error.message);
     }
 }
+
+export const DeleteRecipe = async (recipe_id: number) => {
+    try {
+        const res = await api.delete(`/recipe/${recipe_id}`);
+        return res.data;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+}
+
+interface UpdateRecipeInput {
+    title: string;
+    image_url: string;
+    rating: number;
+    duration: number;
+    difficulty: string;
+    description: string;
+    ingredients: string;
+    instructions: string;
+}
+
+export const UpdateRecipe = async (recipe_id: number, recipe: UpdateRecipeInput) => {
+    try {
+        const res = await api.put(`/recipe/${recipe_id}`, recipe);
+        return res.data;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+}
+    

@@ -28,7 +28,7 @@ def seed_recipes(db: Session):
     recipes = [
         Recipe(
             title="Spaghetti Carbonara",
-            image_url="https://unsplash.com/photos/a-white-plate-topped-with-spaghetti-and-bacon-fDLBn8X_IlU",
+            image_url="https://images.unsplash.com/photo-1633337474564-1d9478ca4e2e?q=80&w=2942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             rating=4.8,
             duration=25,
             difficulty="Easy",
@@ -45,7 +45,7 @@ def seed_recipes(db: Session):
         ),
         Recipe(
             title="Chicken Tikka Masala",
-            image_url="https://unsplash.com/photos/brown-and-green-dish-on-brown-wooden-bowl-sqcH2q7lkvo",
+            image_url="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             rating=4.7,
             duration=40,
             difficulty="Medium",
@@ -64,7 +64,7 @@ def seed_recipes(db: Session):
         ),
         Recipe(
             title="Chocolate Chip Cookies",
-            image_url="https://unsplash.com/photos/brown-cookies-on-black-metal-grill-krNP2ESq-54",
+            image_url="https://images.unsplash.com/photo-1584847801423-852691e41bc7?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             rating=4.9,
             duration=30,
             difficulty="Easy",
@@ -84,7 +84,7 @@ def seed_recipes(db: Session):
         ),
         Recipe(
             title="Beef Tacos",
-            image_url="https://unsplash.com/photos/green-vegetable-on-brown-soil-z_PfaGzeN9E",
+            image_url="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?q=80&w=2988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             rating=4.6,
             duration=20,
             difficulty="Easy",
@@ -101,7 +101,7 @@ def seed_recipes(db: Session):
         ),
         Recipe(
             title="Mango Smoothie",
-            image_url="https://unsplash.com/photos/green-apple-beside-clear-drinking-glass-with-milk-cfo98H6h3tQ",
+            image_url="https://images.unsplash.com/photo-1619898804188-e7bad4bd2127?q=80&w=2942&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             rating=4.8,
             duration=5,
             difficulty="Easy",

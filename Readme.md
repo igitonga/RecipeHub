@@ -53,6 +53,11 @@ cp .env.example .env
 alembic upgrade head
 ```
 
+### Run data seeder
+```bash
+python seeders.py
+```
+
 ### Run the backend
 ```bash
 python main.py

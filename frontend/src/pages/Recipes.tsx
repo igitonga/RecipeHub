@@ -1,51 +1,10 @@
+import { useState } from 'react';
 import RecipeCard from '../components/RecipeCard';
 import { useQuery } from '@tanstack/react-query';
 import { GetRecipes } from '../lib/api';
 import toast from 'react-hot-toast';
+import { Clock, Filter } from 'lucide-react';
 import Loader from '../components/Loader';
-
-const recipes = [
-  {
-    id: 1,
-    title: "Creamy Tuscan Pasta",
-    image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&q=80&w=800",
-    rating: 4.8,
-    cookTime: "30 mins",
-    difficulty: "Easy"
-  },
-  {
-    id: 2,
-    title: "Grilled Salmon Bowl",
-    image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=800",
-    rating: 4.6,
-    cookTime: "25 mins",
-    difficulty: "Medium"
-  },
-  {
-    id: 3,
-    title: "Mediterranean Quinoa Salad",
-    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800",
-    rating: 4.5,
-    cookTime: "20 mins",
-    difficulty: "Easy"
-  },
-  {
-    id: 4,
-    title: "Spicy Thai Curry",
-    image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&q=80&w=800",
-    rating: 4.9,
-    cookTime: "45 mins",
-    difficulty: "Hard"
-  },
-  {
-    id: 5,
-    title: "Classic Beef Burger",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800",
-    rating: 4.7,
-    cookTime: "35 mins",
-    difficulty: "Medium"
-  }
-];
 
 interface Recipe {
   id: number;
@@ -60,6 +19,8 @@ interface Recipe {
 }
 
 function Recipes() {
+  const [selectedTimeRange, setSelectedTimeRange] = useState('all');
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['recipes'],
     queryFn: GetRecipes,
@@ -70,6 +31,28 @@ function Recipes() {
 
   if (isError)
     return toast.error(error.message)
+
+  const timeRanges = [
+    { label: 'All', value: 'all' },
+    { label: 'Quick (< 30 mins)', value: 'quick' },
+    { label: 'Medium (30-45 mins)', value: 'medium' },
+    { label: 'Long (> 45 mins)', value: 'long' },
+  ];
+
+  const filteredRecipes = data.filter((recipe: Recipe) => {
+    switch (selectedTimeRange) {
+      case 'quick':
+        return recipe.duration < 30;
+      case 'medium':
+        return recipe.duration >= 30 && recipe.duration <= 45;
+      case 'long':
+        return recipe.duration > 45;
+      default:
+        return true;
+    }
+  });
+
+  console.log(filteredRecipes);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -82,19 +65,49 @@ function Recipes() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {data.map((recipe: Recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              id={recipe.id}
-              title={recipe.title}
-              image={recipe.image_url}
-              rating={recipe.rating}
-              cookTime={recipe.duration}
-              difficulty={recipe.difficulty}
-            />
-          ))}
+        {/* Filters */}
+        <div className="mb-8">
+          <div className="flex items-center justify-center space-x-4">
+            <div className="relative inline-flex items-center">
+              <Clock className="absolute left-3 h-5 w-5 text-gray-400" />
+              <select
+                value={selectedTimeRange}
+                onChange={(e) => setSelectedTimeRange(e.target.value)}
+                className="pl-10 pr-10 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                {timeRanges.map((range) => (
+                  <option key={range.value} value={range.value}>
+                    {range.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
+
+        {filteredRecipes.length == 0 ? (
+          <div className="text-center py-12">
+            <Filter className="mx-auto h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">No recipes found</h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Try adjusting your filters to find more recipes.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {filteredRecipes.map((recipe: Recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                id={recipe.id}
+                title={recipe.title}
+                image={recipe.image_url}
+                rating={recipe.rating}
+                cookTime={recipe.duration}
+                difficulty={recipe.difficulty}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

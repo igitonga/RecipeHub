@@ -28,9 +28,16 @@ def read_recipe(recipe_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Recipe not found")
     return db_recipe
 
-@router.delete("/recipes/{recipe_id}", response_model=schemas.RecipeResponse)
+@router.delete("/recipe/{recipe_id}", response_model=schemas.RecipeResponse)
 def delete_recipe(recipe_id: int, db: Session = Depends(get_db)):
     db_recipe = crud.delete_recipe(db, recipe_id)
     if db_recipe is None:
         raise HTTPException(status_code=404, detail="Recipe not found")
     return db_recipe
+
+@router.put("/recipe/{recipe_id}", response_model=schemas.RecipeResponse)
+def update_recipe(recipe_id: int, recipe: schemas.RecipeUpdate, db: Session = Depends(get_db)):
+    db_recipe = crud.get_recipe(db, recipe_id)
+    if not db_recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    return crud.update_recipe(db, recipe_id, recipe)

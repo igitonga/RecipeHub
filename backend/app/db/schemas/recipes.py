@@ -21,6 +21,9 @@ class RecipeBase(BaseModel):
 class RecipeCreate(RecipeBase):
     pass
 
+class RecipeUpdate(RecipeBase):
+    pass
+
 class RecipeResponse(RecipeBase):
     id: int
     
