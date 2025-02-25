@@ -88,7 +88,6 @@ export const DeleteRecipe = async (recipe_id: number) => {
 }
 
 interface UpdateRecipeInput {
-    recipe_id: number;
     title: string;
     image_url: string;
     rating: number;

@@ -30,7 +30,6 @@ function RecipeDetails() {
 
   const UpdateRecipeMutation = useMutation({
     mutationFn: () => UpdateRecipe(Number(id), {
-      recipe_id: Number(id),
       title,
       image_url: imageUrl,
       rating,

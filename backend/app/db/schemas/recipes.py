@@ -21,8 +21,15 @@ class RecipeBase(BaseModel):
 class RecipeCreate(RecipeBase):
     pass
 
-class RecipeUpdate(RecipeBase):
-    pass
+class RecipeUpdate(BaseModel):
+    title: str
+    image_url: str
+    rating: float
+    duration: int
+    difficulty: str
+    description: str
+    ingredients: str
+    instructions: str
 
 class RecipeResponse(RecipeBase):
     id: int
