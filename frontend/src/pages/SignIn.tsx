@@ -30,7 +30,7 @@ function SignIn() {
     mutationFn: LoginUser,
     onSuccess: (data) => {
       login(data.access_token, data.user_id);
-      navigate('/recipes');
+      navigate(-1);
     },
     onError: (error: any) => {
       toast.error(error.message);

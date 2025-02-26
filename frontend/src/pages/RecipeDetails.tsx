@@ -5,11 +5,12 @@ import { DeleteRecipe, GetRecipe, UpdateRecipe } from '../lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
-
+import { useAuth } from '../contexts/AuthContext';
 function RecipeDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { userId } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -155,36 +156,38 @@ function RecipeDetails() {
                   <Star className="w-5 h-5 text-yellow-400 fill-current" />
                   <span className="font-medium">{data.rating}</span>
                 </div>
-                <div className="relative">
-                  <button
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    className="bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <MoreVertical className="w-5 h-5 text-gray-600" />
-                  </button>
-                  {isMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                      <div className="py-1" role="menu">
-                        <button
-                          onClick={handleEdit}
-                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          role="menuitem"
-                        >
-                          <Edit2 className="w-4 h-4 mr-2" />
-                          Edit Recipe
-                        </button>
-                        <button
-                          onClick={handleDelete}
-                          className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                          role="menuitem"
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete Recipe
-                        </button>
+                {userId === data.user_id && (
+                  <div className="relative">
+                    <button
+                      onClick={() => setIsMenuOpen(!isMenuOpen)}
+                      className="cursor-pointer bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition-colors duration-200"
+                    >
+                      <MoreVertical className="w-5 h-5 text-gray-600" />
+                    </button>
+                    {isMenuOpen && (
+                      <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div className="py-1" role="menu">
+                          <button
+                            onClick={handleEdit}
+                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            role="menuitem"
+                          >
+                            <Edit2 className="w-4 h-4 mr-2" />
+                            Edit Recipe
+                          </button>
+                          <button
+                            onClick={handleDelete}
+                            className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                            role="menuitem"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete Recipe
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 

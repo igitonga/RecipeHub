@@ -18,6 +18,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, image, rating, cookT
         <img
           src={image}
           alt={title}
+          loading="lazy"
           className="w-full h-48 object-cover"
         />
         <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full text-sm font-medium text-gray-700 shadow-md">

@@ -17,12 +17,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userId, setUserId] = useState<number>(0);
 
   const login = (token: string, userId: number) => {
+    localStorage.setItem('accessToken', token);
+    localStorage.setItem('userId', userId.toString());
     setAccessToken(token);
     setUserId(userId);
   };
 
   const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userId');
     setAccessToken(null);
+    setUserId(0);
     navigate('/signin');
   };
 
