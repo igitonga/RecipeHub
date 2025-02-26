@@ -41,7 +41,7 @@ function RecipeDetails() {
       instructions: JSON.stringify(instructions.map((instruction) => instruction))
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['recipes'] });
+      queryClient.invalidateQueries({ queryKey: ['recipe', id] });
       toast.success('Recipe upated successfully');
       navigate('/recipes');
     },
@@ -93,7 +93,7 @@ function RecipeDetails() {
   }
    
   const addIngredient = () => {
-    setIngredients([...ingredients]);
+    setIngredients([...ingredients, '']);
   };
 
   const removeIngredient = (index: number) => {
@@ -107,7 +107,7 @@ function RecipeDetails() {
   };
 
   const addInstruction = () => {
-    setInstructions([...instructions]);
+    setInstructions([...instructions, '']);
   };
 
   const removeInstruction = (index: number) => {
@@ -376,7 +376,7 @@ function RecipeDetails() {
                             onChange={(e) => updateIngredient(index, e.target.value)}
                             rows={2}
                             className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                            placeholder={`Step ${index + 1}`}
+                            placeholder={`Item ${index + 1}`}
                           />
                         </div>
                         <button
