@@ -1,4 +1,4 @@
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
@@ -13,12 +13,14 @@ function App() {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <Toaster />
-        <Route path="/" element={<Home />} />
-        <Route path="/recipes" element={<Recipes />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/recipe/:id" element={<RecipeDetails />} />
-        <Route path="/add/recipe" element={<AddRecipe />} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/recipe/:id" element={<RecipeDetails />} />
+          <Route path="/add/recipe" element={<AddRecipe />} />
+        </Routes>
       </div>
   );
 }
