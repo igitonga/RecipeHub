@@ -17,10 +17,10 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-    <Router>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <Router>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </Router>
     </QueryClientProvider>
   </StrictMode>
